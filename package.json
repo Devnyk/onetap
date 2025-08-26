@@ -1,0 +1,38 @@
+{
+  "name": "onetap",
+  "version": "1.0.0",
+  "description": "One command to setup your entire development environment - Frontend, Backend, or Full Stack",
+  "main": "index.js",
+  "bin": {
+    "onetap": "./bin/onetap.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cli",
+    "boilerplate",
+    "react",
+    "vite",
+    "tailwind",
+    "express",
+    "mongoose",
+    "mern",
+    "setup",
+    "automation"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "child_process": "^1.0.2",
+    "commander": "^9.5.0",
+    "figlet": "^1.8.2",
+    "fs-extra": "^10.1.0",
+    "inquirer": "^8.2.7",
+    "ora": "^5.4.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
