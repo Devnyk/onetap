@@ -1,72 +1,138 @@
 #!/usr/bin/env node
 
-const { program } = require('commander');
-const chalk = require('chalk');
-const figlet = require('figlet');
-const { showMenu } = require('../src/commands/menu');
-const { setupFrontend } = require('../src/commands/frontend');
-const { setupBackend } = require('../src/commands/backend');
-const { setupFullStack } = require('../src/commands/fullstack');
-const { createFromStructure } = require('../src/commands/structure');
+const { program } = require("commander");
+const chalk = require("chalk");
+const figlet = require("figlet");
+const { showMenu } = require("../src/commands/menu");
+const { setupFrontend } = require("../src/commands/frontend");
+const { setupBackend } = require("../src/commands/backend");
+const { setupFullStack } = require("../src/commands/fullstack");
+const { createFromStructure } = require("../src/commands/structure");
 
-// Display OneTap ASCII art
+// ===== ASCII Banner =====
 console.log(
   chalk.cyan(
-    figlet.textSync('OneTap', {
-      font: 'Big',
-      horizontalLayout: 'default',
-      verticalLayout: 'default',
+    figlet.textSync("OneTap", {
+      font: "Big",
+      horizontalLayout: "default",
+      verticalLayout: "default",
     })
   )
 );
+console.log(chalk.yellow("🚀 One command to rule them all!\n"));
 
-console.log(chalk.yellow('🚀 One command to rule them all!\n'));
-
+// ===== Base CLI Config =====
 program
-  .name('onetap')
-  .description('CLI to setup frontend, backend, full-stack projects, or custom structures instantly')
-  .version('1.0.0');
+  .name("onetap")
+  .description("⚡ Instantly bootstrap frontend, backend, full-stack, or custom structures")
+  .version("1.3.0");
 
+// ===== MENU =====
 program
-  .command('menu')
-  .description('Show interactive setup menu')
-  .action(showMenu);
-
-// Simple frontend command (React only for now)
-program
-  .command('frontend [framework] [project-name]')
-  .description('Setup frontend project (currently supports: react)')
-  .action((framework, projectName) => {
-    setupFrontend(framework || 'react', projectName || 'my-frontend-app');
+  .command("menu")
+  .description("Show interactive setup menu")
+  .action(async () => {
+    try {
+      await showMenu();
+    } catch (err) {
+      console.error(chalk.red("❌ Failed to load menu:"), err.message);
+      process.exit(1);
+    }
   });
 
-// Simple backend command (Node.js only for now) 
+// ===== FRONTEND =====
 program
-  .command('backend [framework] [project-name]')
-  .description('Setup backend project (currently supports: nodejs)')
-  .action((framework, projectName) => {
-    setupBackend(framework || 'nodejs', projectName || 'my-backend-app');
+  .command("frontend")
+  .description("Setup frontend project (React, Next.js, Vue)")
+  .option("--react", "Setup React + Vite + Tailwind project")
+  .option("--next", "Setup Next.js project")
+  .option("--vue", "Setup Vue 3 + Vite project")
+  .option("-n, --name <name>", "Project folder name", "frontend-app")
+  .action(async (options) => {
+    try {
+      if (options.react) {
+        await setupFrontend("react", options.name);
+      } else if (options.next) {
+        await setupFrontend("next", options.name);
+      } else if (options.vue) {
+        await setupFrontend("vue", options.name);
+      } else {
+        console.log(chalk.red("❌ Please specify a frontend type: --react | --next | --vue"));
+        console.log(chalk.cyan("👉 Example: npx onetap frontend --react -n my-app"));
+      }
+    } catch (err) {
+      console.error(chalk.red("❌ Frontend setup failed:"), err.message);
+      process.exit(1);
+    }
   });
 
-// Simple fullstack command (MERN only for now)
+// ===== BACKEND =====
 program
-  .command('fullstack [stack] [project-name]')
-  .description('Setup full stack project (currently supports: mern)')
-  .action((stack, projectName) => {
-    setupFullStack(stack || 'mern', projectName || 'my-fullstack-app');
+  .command("backend")
+  .description("Setup backend project (Node.js, NestJS, Django)")
+  .option("--nodejs", "Setup Node.js + Express backend")
+  .option("--nestjs", "Setup NestJS backend")
+  .option("--django", "Setup Django backend")
+  .option("-n, --name <name>", "Project folder name", "backend-app")
+  .action(async (options) => {
+    try {
+      if (options.nodejs) {
+        await setupBackend("nodejs", options.name);
+      } else if (options.nestjs) {
+        await setupBackend("nestjs", options.name);
+      } else if (options.django) {
+        await setupBackend("django", options.name);
+      } else {
+        console.log(chalk.red("❌ Please specify a backend type: --nodejs | --nestjs | --django"));
+        console.log(chalk.cyan("👉 Example: npx onetap backend --nodejs -n api-server"));
+      }
+    } catch (err) {
+      console.error(chalk.red("❌ Backend setup failed:"), err.message);
+      process.exit(1);
+    }
   });
 
-// Structure command for pasted folder structures
+// ===== FULLSTACK =====
 program
-  .command('structure [project-name]')
-  .description('Create project from pasted folder structure')
-  .action((projectName) => {
-    createFromStructure(projectName || 'my-custom-project');
+  .command("fullstack")
+  .description("Setup full-stack project (MERN supported)")
+  .option("--mern", "Setup MERN (MongoDB + Express + React + Node.js) stack")
+  .option("-n, --name <name>", "Project folder name", "fullstack-app")
+  .action(async (options) => {
+    try {
+      if (options.mern) {
+        await setupFullStack("mern", options.name);
+      } else {
+        console.log(chalk.red("❌ Please specify a fullstack type: --mern"));
+        console.log(chalk.cyan("👉 Example: npx onetap fullstack --mern -n my-mern-app"));
+      }
+    } catch (err) {
+      console.error(chalk.red("❌ Fullstack setup failed:"), err.message);
+      process.exit(1);
+    }
   });
 
-// Default action - show menu (primary interface)
+// ===== CUSTOM STRUCTURE =====
+program
+  .command("structure")
+  .description("Create project from a pasted folder structure")
+  .option("-n, --name <name>", "Project folder name", "custom-project")
+  .action(async (options) => {
+    try {
+      await createFromStructure(options.name);
+    } catch (err) {
+      console.error(chalk.red("❌ Structure generation failed:"), err.message);
+      process.exit(1);
+    }
+  });
+
+// ===== DEFAULT (No Args) =====
 if (!process.argv.slice(2).length) {
-  showMenu();
+  showMenu()
+    .catch((err) => {
+      console.error(chalk.red("❌ Failed to launch menu:"), err.message);
+      process.exit(1);
+    });
 } else {
-  program.parse();
+  program.parse(process.argv);
 }
