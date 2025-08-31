@@ -27,6 +27,7 @@
     "chalk": "^4.1.2",
     "child_process": "^1.0.2",
     "commander": "^9.5.0",
+    "cortxt": "^1.0.7",
     "figlet": "^1.8.2",
     "fs-extra": "^10.1.0",
     "inquirer": "^8.2.7",
