@@ -1,6 +1,6 @@
 # OneTap CLI 🚀 - Lightning Fast Project Setup
 
-![OneTap Banner](https://ik.imagekit.io/1ukuaaqqhl/onetap-banner.png?updatedAt=1755861293199)
+![OneTap Banner](https://ik.imagekit.io/1ukuaaqqhl/onetap-now.png?updatedAt=1756733381405)
 
 **🔥 Stop wasting hours on project setup. Start coding in 30 seconds.**
 
