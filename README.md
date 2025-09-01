@@ -1,4 +1,4 @@
-# OneTap CLI 🚀 - Lightning Fast Project Setup
+# OneTap 🚀 - Lightning Fast Project Setup
 
 ![OneTap Banner](https://ik.imagekit.io/1ukuaaqqhl/onetap-now.png?updatedAt=1756733381405)
 

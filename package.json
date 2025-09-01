@@ -1,5 +1,5 @@
 {
-  "name": "onetap-cli",
+  "name": "onetap",
   "version": "1.0.0",
   "description": "🚀 One command to set up your entire development environment (Frontend, Backend, or Fullstack) in 30 seconds.",
   "main": "src/index.js",
