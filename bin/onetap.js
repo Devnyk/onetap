@@ -69,28 +69,26 @@ program
 // ===== BACKEND =====
 program
   .command("backend")
-  .description("Setup backend project (Node.js, NestJS, Django)")
-  .option("--nodejs", "Setup Node.js + Express backend")
-  .option("--nestjs", "Setup NestJS backend")
-  .option("--django", "Setup Django backend")
-  .option("-n, --name <name>", "Project folder name", "backend-app")
+  .description("Setup backend project (Beginner or Intermediate)")
+  .option("--beginner", "Setup Beginner backend")
+  .option("--intermediate", "Setup Intermediate backend")
+  .option("-n, --name <name>", "Project folder name")
   .action(async (options) => {
     try {
-      if (options.nodejs) {
-        await setupBackend("nodejs", options.name);
-      } else if (options.nestjs) {
-        await setupBackend("nestjs", options.name);
-      } else if (options.django) {
-        await setupBackend("django", options.name);
+      if (options.beginner) {
+        await setupBackend("Beginner", options.name);
+      } else if (options.intermediate) {
+        await setupBackend("Intermediate", options.name);
       } else {
-        console.log(chalk.red("❌ Please specify a backend type: --nodejs | --nestjs | --django"));
-        console.log(chalk.cyan("👉 Example: npx onetap backend --nodejs -n api-server"));
+        console.log(chalk.red("❌ Please specify a backend level: --beginner | --intermediate"));
+        console.log(chalk.cyan("👉 Example: npx onetap backend --beginner -n api-server"));
       }
     } catch (err) {
       console.error(chalk.red("❌ Backend setup failed:"), err.message);
       process.exit(1);
     }
   });
+
 
 // ===== FULLSTACK =====
 program

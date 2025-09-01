@@ -38,40 +38,73 @@ const showMenu = async () => {
       process.exit(0);
     }
 
-    // Ask for project name if not structure
     let projectName = "project";
-    if (setupType !== "structure") {
-      const nameAnswer = await inquirer.prompt([
-        {
-          type: "input",
-          name: "projectName",
-          message: "Enter your project name:",
-          default:
-            setupType === "frontend"
-              ? "frontend-app"
-              : setupType === "backend"
-              ? "backend-app"
-              : "fullstack-app",
-          validate: (input) =>
-            /^[a-z0-9-_]+$/i.test(input.trim())
-              ? true
-              : "⚠️ Only letters, numbers, - and _ are allowed!",
-        },
-      ]);
-      projectName = nameAnswer.projectName;
-    }
 
-    // Execute chosen setup
     switch (setupType) {
       case "frontend":
+        // 👉 Ask project name for frontend
+        const frontendAns = await inquirer.prompt([
+          {
+            type: "input",
+            name: "projectName",
+            message: "Enter your project name:",
+            default: "frontend-app",
+            validate: (input) =>
+              /^[a-z0-9-_]+$/i.test(input.trim())
+                ? true
+                : "⚠️ Only letters, numbers, - and _ are allowed!",
+          },
+        ]);
+        projectName = frontendAns.projectName;
         await setupFrontend("react", projectName);
         break;
-      case "backend":
-        await setupBackend("nodejs", projectName);
-        break;
-      case "fullstack":
-        await setupFullStack("mern", projectName);
-        break;
+
+     case "backend":
+  const { level } = await inquirer.prompt([
+    {
+      type: "list",
+      name: "level",
+      message: "Select backend level:",
+      choices: [
+        { name: "Beginner (Basic structure)", value: "Beginner" },
+        { name: "Intermediate (With models & routes)", value: "Intermediate" },
+      ],
+    },
+  ]);
+
+  const backendAns = await inquirer.prompt([
+    {
+      type: "input",
+      name: "projectName",
+      message: "Enter your backend project name:",
+      default: `backend-${level.toLowerCase()}`,
+    },
+  ]);
+
+  await setupBackend(level, backendAns.projectName);
+  break;
+
+
+    case "fullstack":
+  // 👉 Ask project name for fullstack
+  const fullstackAns = await inquirer.prompt([
+    {
+      type: "input",
+      name: "projectName",
+      message: "Enter your project name:",
+      default: "fullstack-app",
+      validate: (input) =>
+        /^[a-z0-9-_]+$/i.test(input.trim())
+          ? true
+          : "⚠️ Only letters, numbers, - and _ are allowed!",
+    },
+  ]);
+  projectName = fullstackAns.projectName;
+
+  // ✅ Call fullstack setup (Intermediate backend + React + Tailwind, in monorepo)
+  await setupFullStack(projectName);
+  break;
+
       case "structure":
         const { structureName } = await inquirer.prompt([
           {
