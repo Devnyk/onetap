@@ -1,39 +1,61 @@
 {
-  "name": "onetap",
+  "name": "onetap-cli",
   "version": "1.0.0",
-  "description": "One command to setup your entire development environment - Frontend, Backend, or Full Stack",
-  "main": "index.js",
+  "description": "🚀 One command to set up your entire development environment (Frontend, Backend, or Fullstack) in 30 seconds.",
+  "main": "src/index.js",
   "bin": {
     "onetap": "./bin/onetap.js"
   },
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node ./bin/onetap.js",
+    "start": "node ./bin/onetap.js",
+    "test": "echo \"No tests yet\" && exit 0"
   },
   "keywords": [
     "cli",
+    "project-setup",
     "boilerplate",
+    "automation",
     "react",
     "vite",
     "tailwind",
     "express",
+    "mongodb",
     "mongoose",
     "mern",
+    "node",
     "setup",
-    "automation"
+    "generator",
+    "developer-tools"
   ],
-  "author": "Your Name",
+  "author": "Dev Nayak <https://github.com/Devnyk>, Dipraj Girase <https://github.com/diprajgirase>",
   "license": "MIT",
-  "dependencies": {
-    "chalk": "^4.1.2",
-    "child_process": "^1.0.2",
-    "commander": "^9.5.0",
-    "cortxt": "^1.0.7",
-    "figlet": "^1.8.2",
-    "fs-extra": "^10.1.0",
-    "inquirer": "^8.2.7",
-    "ora": "^5.4.1"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devnayak/onetap-cli.git"
+  },
+  "homepage": "https://github.com/devnayak/onetap-cli#readme",
+  "bugs": {
+    "url": "https://github.com/devnayak/onetap-cli/issues"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "README.md",
+    "LICENSE"
+  ],
+  "preferGlobal": true,
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^11.0.0",
+    "figlet": "^1.8.2",
+    "fs-extra": "^11.2.0",
+    "inquirer": "^9.3.7",
+    "ora": "^7.0.1"
   }
 }
