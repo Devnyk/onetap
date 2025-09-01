@@ -6,7 +6,6 @@
   "bin": {
     "onetap": "./bin/onetap.js"
   },
-  "type": "module",
   "scripts": {
     "dev": "node ./bin/onetap.js",
     "start": "node ./bin/onetap.js",
