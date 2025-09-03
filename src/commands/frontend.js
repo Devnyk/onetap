@@ -1,10 +1,10 @@
-const { execSync } = require("child_process");
-const fs = require("fs-extra");
-const path = require("path");
-const chalk = require("chalk");
-const ora = require("ora");
+import { execSync } from "child_process";
+import fs from "fs-extra";
+import path from "path";
+import chalk from "chalk";
+import ora from "ora";
 
-const setupFrontend = async (projectName) => {
+export const setupFrontend = async (projectName) => {
   const spinner = ora();
 
   try {
@@ -64,7 +64,7 @@ const setupFrontend = async (projectName) => {
       let viteConfig = fs.readFileSync(viteConfigPath, "utf-8");
 
       // Ensure React plugin is imported, then add Tailwind
-      if (!viteConfig.includes('@tailwindcss/vite')) {
+      if (!viteConfig.includes("@tailwindcss/vite")) {
         viteConfig = viteConfig.replace(
           /import react.*\n/,
           (match) => `${match}import tailwindcss from '@tailwindcss/vite'\n`
@@ -113,6 +113,7 @@ function App() {
 }
 
 export default App`;
+
     fs.writeFileSync(path.join(projectPath, "src", "App.jsx"), cleanAppJSX);
 
     spinner.succeed(chalk.green("✅ Clean App.jsx created"));
@@ -153,5 +154,3 @@ export default App`;
     throw error;
   }
 };
-
-module.exports = { setupFrontend };

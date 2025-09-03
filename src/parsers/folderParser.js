@@ -1,3 +1,5 @@
+// utils/folderTreeParser.js
+
 /**
  * Enhanced folder tree parser with better validation and content detection
  * - Removes emojis 📁 📄
@@ -5,7 +7,7 @@
  * - Validates nesting
  * - Detects if files might have content based on extensions
  */
-function parseFolderTree(input) {
+export function parseFolderTree(input) {
   const lines = input
     .split("\n")
     .map(line => line.replace(/\r$/, "")) // Windows endings
@@ -80,7 +82,7 @@ function parseFolderTree(input) {
 /**
  * Check if a name is a known folder (even without trailing slash)
  */
-function isKnownFolder(name) {
+export function isKnownFolder(name) {
   const knownFolders = [
     'src', 'public', 'dist', 'build', 'assets', 'components', 'pages', 
     'utils', 'lib', 'styles', 'images', 'fonts', 'scripts', 'config',
@@ -93,7 +95,7 @@ function isKnownFolder(name) {
 /**
  * Check if file extension suggests it might contain important content
  */
-function hasImportantExtension(filename) {
+export function hasImportantExtension(filename) {
   const importantExtensions = [
     '.js', '.ts', '.tsx', '.jsx', '.vue', '.svelte',
     '.json', '.config.js', '.config.ts', 
@@ -114,7 +116,7 @@ function hasImportantExtension(filename) {
 /**
  * Validate the parsed structure for common issues
  */
-function validateStructure(tree) {
+export function validateStructure(tree) {
   const issues = [];
   
   function traverse(nodes, path = "") {
@@ -141,10 +143,3 @@ function validateStructure(tree) {
   traverse(tree);
   return issues;
 }
-
-module.exports = { 
-  parseFolderTree, 
-  validateStructure,
-  isKnownFolder,
-  hasImportantExtension 
-};

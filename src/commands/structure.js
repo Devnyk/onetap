@@ -1,10 +1,13 @@
-const inquirer = require("inquirer");
-const chalk = require("chalk");
-const { parseFolderTree } = require("../parsers/folderParser");
-const { detectProjectType, getBaseFolder } = require("../utils/projectDetector");
-const { smartMerge } = require("../utils/smartMerger");
+// src/commands/createFromStructure.js
+import inquirer from "inquirer";
+import chalk from "chalk";
+import readline from "readline";
 
-async function createFromStructure() {
+import { parseFolderTree } from "../parsers/folderParser.js";
+import { detectProjectType, getBaseFolder } from "../utils/projectDetector.js";
+import { smartMerge } from "../utils/smartMerger.js";
+
+export async function createFromStructure() {
   try {
     const cwd = process.cwd();
     const projectInfo = detectProjectType(cwd);
@@ -20,15 +23,40 @@ async function createFromStructure() {
       console.log(chalk.cyan(`📂 Base directory: ${baseDir}`));
     }
 
-    const { structure } = await inquirer.prompt([
-      {
-        type: "editor",
-        name: "structure",
-        message: "Paste your folder structure here (text tree):",
-      },
-    ]);
+    // Cross-platform compatible input method
+    console.log(chalk.yellow("\n📝 Please paste your folder structure:"));
+    console.log(chalk.gray("(Paste the structure and press Enter twice when done)\n"));
 
-    if (!structure || !structure.trim()) {
+    let structure = "";
+    let emptyLineCount = 0;
+
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+      terminal: false,
+    });
+
+    await new Promise((resolve) => {
+      rl.on("line", (line) => {
+        if (line.trim() === "") {
+          emptyLineCount++;
+          if (emptyLineCount >= 2) {
+            rl.close();
+            resolve();
+            return;
+          }
+        } else {
+          emptyLineCount = 0;
+          structure += line + "\n";
+        }
+      });
+
+      rl.on("close", () => {
+        resolve();
+      });
+    });
+
+    if (!structure.trim()) {
       console.log(chalk.red("❌ No structure provided! Aborting..."));
       return;
     }
@@ -45,22 +73,19 @@ async function createFromStructure() {
     console.log(chalk.gray("• Critical config files are automatically protected"));
 
     const options = {
-      preserveContent: true,    // Always preserve content
-      skipCritical: true,       // Always protect critical files
-      dirsOnly: false,          // Create both folders and files
-      verbose: true,            // Always show what's happening
+      preserveContent: true, // Always preserve content
+      skipCritical: true, // Always protect critical files
+      dirsOnly: false, // Create both folders and files
+      verbose: true, // Always show what's happening
       projectType: projectInfo.type || projectInfo,
-      isNested: projectInfo.isNested || false
+      isNested: projectInfo.isNested || false,
     };
 
     await smartMerge(parsed, baseDir, options);
 
     console.log(chalk.green("\n✅ Structure merged successfully! 🚀"));
     console.log(chalk.blue("💡 All existing files with content were automatically preserved."));
-    
   } catch (err) {
     console.error(chalk.red("❌ Failed to create structure:"), err.message);
   }
 }
-
-module.exports = { createFromStructure };

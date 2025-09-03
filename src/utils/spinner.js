@@ -1,5 +1,6 @@
-const ora = require("ora");
+// src/utils/spinner.js
+import ora from "ora";
 
-module.exports = {
+export const spinner = {
   start: (msg) => ora(msg).start(),
 };

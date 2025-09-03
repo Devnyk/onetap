@@ -1,12 +1,13 @@
-const inquirer = require("inquirer");
-const chalk = require("chalk");
-const figlet = require("figlet");
-const { setupFrontend } = require("./frontend");
-const { setupBackend } = require("./backend");
-const { setupFullStack } = require("./fullstack");
-const { createFromStructure } = require("./structure");
+import inquirer from "inquirer";
+import chalk from "chalk";
+import figlet from "figlet";
 
-const showMenu = async () => {
+import { setupFrontend } from "./frontend.js";
+import { setupBackend } from "./backend.js";
+import { setupFullStack } from "./fullstack.js";
+import { createFromStructure } from "./structure.js";
+
+export const showMenu = async () => {
   try {
     console.clear();
     console.log(
@@ -41,8 +42,7 @@ const showMenu = async () => {
     let projectName = "project";
 
     switch (setupType) {
-      case "frontend":
-        // 👉 Ask project name for frontend
+      case "frontend": {
         const frontendAns = await inquirer.prompt([
           {
             type: "input",
@@ -58,54 +58,54 @@ const showMenu = async () => {
         projectName = frontendAns.projectName;
         await setupFrontend("react", projectName);
         break;
+      }
 
-     case "backend":
-  const { level } = await inquirer.prompt([
-    {
-      type: "list",
-      name: "level",
-      message: "Select backend level:",
-      choices: [
-        { name: "Beginner (Basic structure)", value: "Beginner" },
-        { name: "Intermediate (With models & routes)", value: "Intermediate" },
-      ],
-    },
-  ]);
+      case "backend": {
+        const { level } = await inquirer.prompt([
+          {
+            type: "list",
+            name: "level",
+            message: "Select backend level:",
+            choices: [
+              { name: "Beginner (Basic structure)", value: "Beginner" },
+              { name: "Intermediate (With models & routes)", value: "Intermediate" },
+            ],
+          },
+        ]);
 
-  const backendAns = await inquirer.prompt([
-    {
-      type: "input",
-      name: "projectName",
-      message: "Enter your backend project name:",
-      default: `backend-${level.toLowerCase()}`,
-    },
-  ]);
+        const backendAns = await inquirer.prompt([
+          {
+            type: "input",
+            name: "projectName",
+            message: "Enter your backend project name:",
+            default: `backend-${level.toLowerCase()}`,
+          },
+        ]);
 
-  await setupBackend(level, backendAns.projectName);
-  break;
+        await setupBackend(level, backendAns.projectName);
+        break;
+      }
 
+      case "fullstack": {
+        const fullstackAns = await inquirer.prompt([
+          {
+            type: "input",
+            name: "projectName",
+            message: "Enter your project name:",
+            default: "fullstack-app",
+            validate: (input) =>
+              /^[a-z0-9-_]+$/i.test(input.trim())
+                ? true
+                : "⚠️ Only letters, numbers, - and _ are allowed!",
+          },
+        ]);
+        projectName = fullstackAns.projectName;
 
-    case "fullstack":
-  // 👉 Ask project name for fullstack
-  const fullstackAns = await inquirer.prompt([
-    {
-      type: "input",
-      name: "projectName",
-      message: "Enter your project name:",
-      default: "fullstack-app",
-      validate: (input) =>
-        /^[a-z0-9-_]+$/i.test(input.trim())
-          ? true
-          : "⚠️ Only letters, numbers, - and _ are allowed!",
-    },
-  ]);
-  projectName = fullstackAns.projectName;
+        await setupFullStack(projectName);
+        break;
+      }
 
-  // ✅ Call fullstack setup (Intermediate backend + React + Tailwind, in monorepo)
-  await setupFullStack(projectName);
-  break;
-
-      case "structure":
+      case "structure": {
         const { structureName } = await inquirer.prompt([
           {
             type: "input",
@@ -120,9 +120,9 @@ const showMenu = async () => {
         ]);
         await createFromStructure(structureName);
         break;
+      }
     }
 
-    // Ask user if they want another setup
     const { again } = await inquirer.prompt([
       {
         type: "confirm",
@@ -134,7 +134,7 @@ const showMenu = async () => {
 
     if (again) {
       console.log("\n" + chalk.gray("=".repeat(60)) + "\n");
-      await showMenu(); // restart loop
+      await showMenu();
     } else {
       console.log(chalk.green("\n✨ All done! Happy coding! 🚀\n"));
       process.exit(0);
@@ -144,5 +144,3 @@ const showMenu = async () => {
     process.exit(1);
   }
 };
-
-module.exports = { showMenu };

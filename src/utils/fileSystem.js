@@ -1,10 +1,8 @@
+import fs from "fs-extra";
+import path from "path";
+import chalk from "chalk";
 
-const fs = require("fs-extra");
-const path = require("path");
-const chalk = require("chalk");
-
-// ----------------- Friend's version (sync) -----------------
-// dir + filename + content -> always writes with content
+// ----------------- Sync version -----------------
 function createFile(dir, filename, content = "") {
   fs.ensureDirSync(dir);
   const filePath = path.join(dir, filename);
@@ -13,7 +11,7 @@ function createFile(dir, filename, content = "") {
   return filePath;
 }
 
-// ----------------- Your version (async safe) -----------------
+// ----------------- Async safe version -----------------
 async function ensureDir(dirPath) {
   try {
     await fs.ensureDir(dirPath);
@@ -37,15 +35,31 @@ async function createFileSafe(filePath) {
 }
 
 // ----------------- Exports -----------------
-module.exports = {
+export {
   // sync utils
-  ensureDirSync: (dir) => fs.ensureDirSync(dir),
-  writeFileSync: (file, content) => fs.outputFileSync(file, content),
-  exists: (file) => fs.existsSync(file),
-  join: (...args) => path.join(...args),
-  createFile, // sync version
-
-  // async utils
-  ensureDir,
-  createFileSafe, // async safe version
+  createFile,
+  ensureDir as ensureDirAsync, // renamed for clarity
+  createFileSafe,
+  // wrapped sync helpers
+  ensureDirSync,
+  writeFileSync,
+  exists,
+  join
 };
+
+// helpers (sync)
+function ensureDirSync(dir) {
+  return fs.ensureDirSync(dir);
+}
+
+function writeFileSync(file, content) {
+  return fs.outputFileSync(file, content);
+}
+
+function exists(file) {
+  return fs.existsSync(file);
+}
+
+function join(...args) {
+  return path.join(...args);
+}
