@@ -1,3 +1,4 @@
+// src/commands/fullstack.js
 import fs from "fs-extra";
 import path from "path";
 import { execSync } from "child_process";
@@ -9,37 +10,44 @@ export async function setupFullStack(projectName = "fullstack-app") {
   const projectPath = path.join(process.cwd(), projectName);
 
   try {
-    logger.info(`Creating fullstack monorepo: ${projectName}...`);
+    logger.info(`🚀 Creating fullstack monorepo: ${projectName}...`);
 
-    // Root monorepo folder
+    // Ensure root project folder
     await fs.ensureDir(projectPath);
 
     // Save original cwd
     const originalCwd = process.cwd();
 
-    // 👉 Setup frontend
+    /**
+     * FRONTEND SETUP
+     */
     process.chdir(projectPath);
-    logger.info("Setting up frontend (React + Tailwind) in /frontend ...");
+    logger.info("🎨 Setting up frontend (React + Tailwind) in /frontend ...");
     await setupFrontend("frontend");
     const frontendPath = path.join(projectPath, "frontend");
 
-    // Install extra frontend deps
-    logger.info("Installing extra frontend dependencies: react-router, axios, react-hook-form ...");
-    execSync("npm install react-router axios react-hook-form", {
+    // Extra frontend dependencies
+    logger.info("📦 Installing extra frontend dependencies: react-router, axios, react-hook-form ...");
+    execSync("npm install react-router-dom axios react-hook-form", {
       cwd: frontendPath,
       stdio: "inherit",
     });
 
-    // 👉 Setup backend
+    /**
+     * BACKEND SETUP
+     */
     process.chdir(projectPath);
-    logger.info("Setting up backend (Intermediate) in /backend ...");
+    logger.info("🛠️ Setting up backend (Intermediate) in /backend ...");
     await setupBackend("Intermediate", "backend");
     const backendPath = path.join(projectPath, "backend");
 
-    // Restore original cwd
+    // Restore original working directory
     process.chdir(originalCwd);
 
-    logger.success(`✅ Fullstack monorepo created at ${projectPath}`);
+    /**
+     * SUCCESS MESSAGE
+     */
+    logger.success(`✅ Fullstack monorepo created at ${projectPath}\n`);
     logger.info("👉 To run your apps:");
     logger.info(`   cd ${projectName}/frontend && npm run dev   # Start frontend`);
     logger.info(`   cd ${projectName}/backend && npm run dev   # Start backend`);

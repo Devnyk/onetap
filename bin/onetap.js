@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 
-const { program } = require("commander");
-const chalk = require("chalk");
-const figlet = require("figlet");
-const { showMenu } = require("../src/commands/menu");
-const { setupFrontend } = require("../src/commands/frontend");
-const { setupBackend } = require("../src/commands/backend");
-const { setupFullStack } = require("../src/commands/fullstack");
-const { createFromStructure } = require("../src/commands/structure");
+import { program } from "commander";
+import chalk from "chalk";
+import figlet from "figlet";
+
+import { showMenu } from "../src/commands/menu.js";
+import { setupFrontend } from "../src/commands/frontend.js";
+import { setupBackend } from "../src/commands/backend.js";
+import { setupFullStack } from "../src/commands/fullstack.js";
+import { createFromStructure } from "../src/commands/structure.js";
 
 // ===== ASCII Banner =====
 console.log(
@@ -89,7 +90,6 @@ program
     }
   });
 
-
 // ===== FULLSTACK =====
 program
   .command("fullstack")
@@ -126,11 +126,10 @@ program
 
 // ===== DEFAULT (No Args) =====
 if (!process.argv.slice(2).length) {
-  showMenu()
-    .catch((err) => {
-      console.error(chalk.red("❌ Failed to launch menu:"), err.message);
-      process.exit(1);
-    });
+  showMenu().catch((err) => {
+    console.error(chalk.red("❌ Failed to launch menu:"), err.message);
+    process.exit(1);
+  });
 } else {
   program.parse(process.argv);
 }
