@@ -33,11 +33,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/devnayak/onetap-cli.git"
+    "url": "git+https://github.com/Devnyk/onetap.git"
   },
-  "homepage": "https://github.com/devnayak/onetap-cli#readme",
+  "homepage": "https://github.com/Devnyk/onetap#readme",
   "bugs": {
-    "url": "https://github.com/devnayak/onetap-cli/issues"
+    "url": "https://github.com/Devnyk/onetap/issues"
   },
   "engines": {
     "node": ">=18.0.0",
